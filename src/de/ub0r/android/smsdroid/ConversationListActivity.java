@@ -38,9 +38,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
-import android.support.v4.view.Window;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -50,6 +47,12 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
+
 import de.ub0r.android.lib.ChangelogHelper;
 import de.ub0r.android.lib.DonationHelper;
 import de.ub0r.android.lib.Log;
@@ -57,13 +60,14 @@ import de.ub0r.android.lib.Market;
 import de.ub0r.android.lib.Utils;
 import de.ub0r.android.lib.apis.Contact;
 import de.ub0r.android.lib.apis.ContactsWrapper;
+import de.ub0r.android.smsdroid.grid.R;
 
 /**
  * Main {@link FragmentActivity} showing conversations.
  * 
  * @author flx
  */
-public final class ConversationListActivity extends FragmentActivity implements
+public final class ConversationListActivity extends SherlockFragmentActivity implements
 		OnItemClickListener, OnItemLongClickListener {
 	/** Tag for output. */
 	public static final String TAG = "main";
@@ -303,7 +307,7 @@ public final class ConversationListActivity extends FragmentActivity implements
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
-		this.getMenuInflater().inflate(R.menu.conversationlist, menu);
+		this.getSupportMenuInflater().inflate(R.menu.conversationlist, menu);
 		if (prefsNoAds) {
 			menu.removeItem(R.id.item_donate);
 		}

@@ -26,6 +26,7 @@ import android.content.Context;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import de.ub0r.android.smsdroid.grid.R;
 
 /**
  * @author flx, The Android Open Source Project

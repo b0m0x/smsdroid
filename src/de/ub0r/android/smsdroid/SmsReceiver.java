@@ -44,6 +44,7 @@ import android.telephony.gsm.SmsMessage;
 import de.ub0r.android.lib.Log;
 import de.ub0r.android.lib.Utils;
 import de.ub0r.android.lib.apis.NotificationBuilderWrapper;
+import de.ub0r.android.smsdroid.grid.R;
 
 /**
  * Listen for new sms.

@@ -23,6 +23,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import de.ub0r.android.lib.IPreferenceContainer;
+import de.ub0r.android.smsdroid.grid.R;
 
 /**
  * {@link PreferenceFragment} for API>=11.

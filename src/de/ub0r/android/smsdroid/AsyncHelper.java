@@ -23,6 +23,7 @@ import java.util.concurrent.RejectedExecutionException;
 import android.content.Context;
 import android.os.AsyncTask;
 import de.ub0r.android.lib.Log;
+import de.ub0r.android.smsdroid.grid.R;
 
 /**
  * @author flx

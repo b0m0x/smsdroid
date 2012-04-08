@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import de.ub0r.android.lib.Log;
+import de.ub0r.android.smsdroid.grid.R;
 
 /**
  * Database holding blacklisted numbers.

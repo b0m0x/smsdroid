@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import de.ub0r.android.lib.Log;
 import de.ub0r.android.lib.Utils;
+import de.ub0r.android.smsdroid.grid.R;
 
 /**
  * Provide search results.

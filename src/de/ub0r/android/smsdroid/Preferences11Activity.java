@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import de.ub0r.android.lib.IPreferenceContainer;
 import de.ub0r.android.lib.Utils;
+import de.ub0r.android.smsdroid.grid.R;
 
 /**
  * {@link PreferenceActivity} for API>=11.

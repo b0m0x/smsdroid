@@ -33,6 +33,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.Toast;
 import de.ub0r.android.lib.Log;
+import de.ub0r.android.smsdroid.grid.R;
 
 /**
  * @author flx

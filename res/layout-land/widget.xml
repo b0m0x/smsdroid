@@ -15,7 +15,7 @@
 		not, see <http://www.gnu.org/licenses/>.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/de.ub0r.android.smsdroid"
+    xmlns:app="http://schemas.android.com/apk/res/de.ub0r.android.smsdroid.grid"
     android:id="@+id/widget"
     android:layout_width="90dip"
     android:layout_height="76dip"

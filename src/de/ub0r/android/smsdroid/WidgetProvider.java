@@ -27,6 +27,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.RemoteViews;
 import de.ub0r.android.lib.Log;
+import de.ub0r.android.smsdroid.grid.R;
 
 /**
  * A widget provider.

@@ -28,6 +28,7 @@ import android.provider.BaseColumns;
 import android.provider.CallLog.Calls;
 import de.ub0r.android.lib.Log;
 import de.ub0r.android.lib.apis.Contact;
+import de.ub0r.android.smsdroid.grid.R;
 
 /**
  * Class holding a single conversation.
