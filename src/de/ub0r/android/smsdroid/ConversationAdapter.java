@@ -33,14 +33,12 @@ import android.provider.CallLog.Calls;
 import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.ub0r.android.lib.Log;
 import de.ub0r.android.lib.apis.Contact;
 import de.ub0r.android.lib.apis.ContactsWrapper;
-import de.ub0r.android.smsdroid.R;
 
 /**
  * Adapter for the list of {@link Conversation}s.
@@ -80,6 +78,16 @@ public class ConversationAdapter extends ResourceCursorAdapter {
 	private final boolean convertNCR;
 
 	private boolean useGridLayout;
+	
+	static class ViewHolder {
+		TextView tvBody;
+		TextView tvPerson;
+		TextView tvCount;
+		TextView tvDate;
+		ImageView ivPhoto;
+		View vRead;
+	    LinearLayout panel;		
+	}
 
 	/**
 	 * Handle queries in background.
@@ -181,81 +189,78 @@ public class ConversationAdapter extends ResourceCursorAdapter {
 	}
 
 	@Override
-	public View getView(int pos, View convertView, ViewGroup p) {
-		View v = super.getView(pos, convertView, p);
-		if (useGridLayout) {
-			GridView parent = (GridView) p;
-			int n = (parent != null ? parent.getNumColumns() : 2);
-			int width = activity.getWindowManager().getDefaultDisplay().getWidth();
-			width = width / n - n + 1;
-			v.setLayoutParams(new GridView.LayoutParams(width, width));
-		}
-		return v;
+	public View getView(int pos, View convertView, ViewGroup parent) {
+		return super.getView(pos, convertView, parent);
 	}
 
-	/**
-	 * {@inheritDoc}
+	/*
+	 * 
+	 * /** {@inheritDoc}
 	 */
 	@Override
 	public final void bindView(final View view, final Context context, final Cursor cursor) {
 		final Conversation c = Conversation.getConversation(context, cursor, false);
 		final Contact contact = c.getContact();
+		
+		ViewHolder holder = (ViewHolder) view.getTag();
+		if (holder == null) {
+			holder = new ViewHolder();
+			holder.tvPerson = (TextView) view.findViewById(R.id.addr);
+			holder.tvCount = (TextView) view.findViewById(R.id.count);
+			holder.tvBody = (TextView) view.findViewById(R.id.body);
+			holder.tvDate = (TextView) view.findViewById(R.id.date);
+			holder.ivPhoto = (ImageView) view.findViewById(R.id.photo);
+			holder.vRead = (View) view.findViewById(R.id.read);
+			holder.panel = (LinearLayout) view.findViewById(R.id.panel);
+			view.setTag(holder);
+		}
 
-		final TextView tvPerson = (TextView) view.findViewById(R.id.addr);
-		final TextView tvCount = (TextView) view.findViewById(R.id.count);
-		final TextView tvBody = (TextView) view.findViewById(R.id.body);
-		final TextView tvDate = (TextView) view.findViewById(R.id.date);
 		if (useGridLayout) {
-			final LinearLayout panel = (LinearLayout) view.findViewById(R.id.panel);
-			panel.setBackgroundColor(0xAA222222);
+			holder.panel.setBackgroundColor(0xAA222222);
+			holder.tvCount.setVisibility(View.GONE);
+		} else {
+			final int count = c.getCount();
+			if (count < 0) {
+				holder.tvCount.setText("");
+			} else {
+				holder.tvCount.setText("(" + c.getCount() + ")");
+			}
 		}
 		if (this.textSize > 0) {
-			tvBody.setTextSize(this.textSize);
+			holder.tvBody.setTextSize(this.textSize);
 		}
 
 		final int col = this.textColor;
 		if (col != 0) {
-			tvPerson.setTextColor(col);
-			tvBody.setTextColor(col);
-			tvCount.setTextColor(col);
-			tvDate.setTextColor(col);
+			holder.tvPerson.setTextColor(col);
+			holder.tvBody.setTextColor(col);
+			holder.tvCount.setTextColor(col);
+			holder.tvDate.setTextColor(col);
 		}
-		final ImageView ivPhoto = (ImageView) view.findViewById(R.id.photo);
 
 		if (useGridLayout || ConversationListActivity.showContactPhoto) {
-			ivPhoto.setImageDrawable(contact.getAvatar(this.activity, this.defaultContactAvatar));
-			ivPhoto.setVisibility(View.VISIBLE);
+			holder.ivPhoto.setImageDrawable(contact.getAvatar(this.activity, this.defaultContactAvatar));
+			holder.ivPhoto.setVisibility(View.VISIBLE);
 			if (!useGridLayout) {
-				ivPhoto.setOnClickListener(WRAPPER.getQuickContact(context, ivPhoto,
+				holder.ivPhoto.setOnClickListener(WRAPPER.getQuickContact(context, holder.ivPhoto,
 						contact.getLookUpUri(context.getContentResolver()), 2, null));
 			}
 		} else {
-			ivPhoto.setVisibility(View.GONE);
+			holder.ivPhoto.setVisibility(View.GONE);
 		}
 
-		// count
-		if (useGridLayout) {
-			tvCount.setVisibility(View.GONE);
-		} else {
-			final int count = c.getCount();
-			if (count < 0) {
-				tvCount.setText("");
-			} else {
-				tvCount.setText("(" + c.getCount() + ")");
-			}
-
-		}
+		
 		if (this.isBlocked(contact.getNumber())) {
-			tvPerson.setText("[" + contact.getDisplayName() + "]");
+			holder.tvPerson.setText("[" + contact.getDisplayName() + "]");
 		} else {
-			tvPerson.setText(contact.getDisplayName());
+			holder.tvPerson.setText(contact.getDisplayName());
 		}
 
 		// read status
 		if (c.getRead() == 0) {
-			view.findViewById(R.id.read).setVisibility(View.VISIBLE);
+			holder.vRead.setVisibility(View.VISIBLE);
 		} else {
-			view.findViewById(R.id.read).setVisibility(View.INVISIBLE);
+			holder.vRead.setVisibility(View.INVISIBLE);
 		}
 
 		// body
@@ -264,14 +269,14 @@ public class ConversationAdapter extends ResourceCursorAdapter {
 			text = context.getString(R.string.mms_conversation);
 		}
 		if (this.convertNCR) {
-			tvBody.setText(Converter.convertDecNCR2Char(text));
+			holder.tvBody.setText(Converter.convertDecNCR2Char(text));
 		} else {
-			tvBody.setText(text);
+			holder.tvBody.setText(text);
 		}
 
 		// date
 		long time = c.getDate();
-		tvDate.setText(ConversationListActivity.getDate(context, time));
+		holder.tvDate.setText(ConversationListActivity.getDate(context, time));
 
 		// presence
 		ImageView ivPresence = (ImageView) view.findViewById(R.id.presence);
