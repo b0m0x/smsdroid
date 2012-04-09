@@ -28,7 +28,7 @@ import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import de.ub0r.android.lib.DbUtils;
 import de.ub0r.android.lib.apis.ContactsWrapper;
-import de.ub0r.android.smsdroid.grid.R;
+import de.ub0r.android.smsdroid.R;
 
 /**
  * CursorAdapter getting Name, Phone from DB.

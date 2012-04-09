@@ -32,7 +32,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import de.ub0r.android.lib.Log;
 import de.ub0r.android.lib.apis.ContactsWrapper;
-import de.ub0r.android.smsdroid.grid.R;
+import de.ub0r.android.smsdroid.R;
 
 /**
  * Class sending messages via standard Messaging interface.

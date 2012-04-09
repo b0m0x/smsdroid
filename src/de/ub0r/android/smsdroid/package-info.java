@@ -24,5 +24,5 @@
  */
 package de.ub0r.android.smsdroid;
 
-import de.ub0r.android.smsdroid.grid.R;
+import de.ub0r.android.smsdroid.R;
 

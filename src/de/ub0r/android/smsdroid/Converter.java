@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.text.TextUtils;
-import de.ub0r.android.smsdroid.grid.R;
+import de.ub0r.android.smsdroid.R;
 
 /**
  * Converts a string containing &#...; escapes to a string of characters. Taken

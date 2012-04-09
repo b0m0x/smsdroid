@@ -24,7 +24,7 @@ import android.support.v4.app.FragmentActivity;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
-import de.ub0r.android.smsdroid.grid.R;
+import de.ub0r.android.smsdroid.R;
 
 /**
  * Display About {@link FragmentActivity}.

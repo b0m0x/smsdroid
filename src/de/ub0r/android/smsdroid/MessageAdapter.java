@@ -37,7 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import de.ub0r.android.lib.Log;
 import de.ub0r.android.lib.apis.Contact;
-import de.ub0r.android.smsdroid.grid.R;
+import de.ub0r.android.smsdroid.R;
 
 /**
  * Adapter for the list of {@link Conversation}s.

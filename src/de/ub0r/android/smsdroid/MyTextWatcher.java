@@ -8,7 +8,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
 import de.ub0r.android.lib.apis.TelephonyWrapper;
-import de.ub0r.android.smsdroid.grid.R;
+import de.ub0r.android.smsdroid.R;
 
 public final class MyTextWatcher implements TextWatcher {
 	/** {@link TelephonyWrapper}. */
