@@ -45,6 +45,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -61,7 +62,6 @@ import de.ub0r.android.lib.Market;
 import de.ub0r.android.lib.Utils;
 import de.ub0r.android.lib.apis.Contact;
 import de.ub0r.android.lib.apis.ContactsWrapper;
-import de.ub0r.android.smsdroid.R;
 
 /**
  * Main {@link FragmentActivity} showing conversations.
@@ -176,7 +176,13 @@ public final class ConversationListActivity extends SherlockFragmentActivity imp
 	 *            ListAdapter
 	 */
 	private void setListAdapter(final ListAdapter la) {
-		this.getListView().setAdapter(la);
+		AbsListView v = this.getListView();
+		if (v instanceof GridView) {
+			((GridView) v).setAdapter(la);
+		} else if (v instanceof ListView) {
+			((ListView) v).setAdapter(la);
+		}
+
 	}
 
 	/**
