@@ -18,18 +18,24 @@
  */
 package de.ub0r.android.smsdroid;
 
+import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.CallLog.Calls;
+import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ResourceCursorAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.ub0r.android.lib.Log;
 import de.ub0r.android.lib.apis.Contact;
@@ -59,7 +65,7 @@ public class ConversationAdapter extends ResourceCursorAdapter {
 	/** Token for {@link BackgroundQueryHandler}: message list query. */
 	private static final int MESSAGE_LIST_QUERY_TOKEN = 0;
 	/** Reference to {@link ConversationListActivity}. */
-	private final ConversationListActivity activity;
+	private final Activity activity;
 
 	/** List of blocked numbers. */
 	private final String[] blacklist;
@@ -72,6 +78,8 @@ public class ConversationAdapter extends ResourceCursorAdapter {
 
 	/** Convert NCR. */
 	private final boolean convertNCR;
+
+	private boolean useGridLayout;
 
 	/**
 	 * Handle queries in background.
@@ -114,9 +122,15 @@ public class ConversationAdapter extends ResourceCursorAdapter {
 	 * @param c
 	 *            {@link ConversationListActivity}
 	 */
-	public ConversationAdapter(final ConversationListActivity c) {
+	public ConversationAdapter(final Activity c) {
 		super(c, R.layout.conversationlist_item, null, true);
 		this.activity = c;
+
+		SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(activity);
+		this.useGridLayout = p.getBoolean("use_gridlayout", false);
+		if (useGridLayout) {
+			super.setViewResource(R.layout.conversation_square);
+		}
 		final ContentResolver cr = c.getContentResolver();
 		this.queryHandler = new BackgroundQueryHandler(cr);
 		SpamDB spam = new SpamDB(c);
@@ -166,6 +180,19 @@ public class ConversationAdapter extends ResourceCursorAdapter {
 		}
 	}
 
+	@Override
+	public View getView(int pos, View convertView, ViewGroup p) {
+		View v = super.getView(pos, convertView, p);
+		if (useGridLayout) {
+			GridView parent = (GridView) p;
+			int n = (parent != null ? parent.getNumColumns() : 2);
+			int width = activity.getWindowManager().getDefaultDisplay().getWidth();
+			width = width / n - n + 1;
+			v.setLayoutParams(new GridView.LayoutParams(width, width));
+		}
+		return v;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -178,9 +205,14 @@ public class ConversationAdapter extends ResourceCursorAdapter {
 		final TextView tvCount = (TextView) view.findViewById(R.id.count);
 		final TextView tvBody = (TextView) view.findViewById(R.id.body);
 		final TextView tvDate = (TextView) view.findViewById(R.id.date);
+		if (useGridLayout) {
+			final LinearLayout panel = (LinearLayout) view.findViewById(R.id.panel);
+			panel.setBackgroundColor(0xAA222222);
+		}
 		if (this.textSize > 0) {
 			tvBody.setTextSize(this.textSize);
 		}
+
 		final int col = this.textColor;
 		if (col != 0) {
 			tvPerson.setTextColor(col);
@@ -190,21 +222,28 @@ public class ConversationAdapter extends ResourceCursorAdapter {
 		}
 		final ImageView ivPhoto = (ImageView) view.findViewById(R.id.photo);
 
-		if (ConversationListActivity.showContactPhoto) {
+		if (useGridLayout || ConversationListActivity.showContactPhoto) {
 			ivPhoto.setImageDrawable(contact.getAvatar(this.activity, this.defaultContactAvatar));
 			ivPhoto.setVisibility(View.VISIBLE);
-			ivPhoto.setOnClickListener(WRAPPER.getQuickContact(context, ivPhoto,
-					contact.getLookUpUri(context.getContentResolver()), 2, null));
+			if (!useGridLayout) {
+				ivPhoto.setOnClickListener(WRAPPER.getQuickContact(context, ivPhoto,
+						contact.getLookUpUri(context.getContentResolver()), 2, null));
+			}
 		} else {
 			ivPhoto.setVisibility(View.GONE);
 		}
 
 		// count
-		final int count = c.getCount();
-		if (count < 0) {
-			tvCount.setText("");
+		if (useGridLayout) {
+			tvCount.setVisibility(View.GONE);
 		} else {
-			tvCount.setText("(" + c.getCount() + ")");
+			final int count = c.getCount();
+			if (count < 0) {
+				tvCount.setText("");
+			} else {
+				tvCount.setText("(" + c.getCount() + ")");
+			}
+
 		}
 		if (this.isBlocked(contact.getNumber())) {
 			tvPerson.setText("[" + contact.getDisplayName() + "]");

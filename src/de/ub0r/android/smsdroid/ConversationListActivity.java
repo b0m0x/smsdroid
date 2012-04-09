@@ -41,6 +41,7 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -164,8 +165,8 @@ public final class ConversationListActivity extends SherlockFragmentActivity imp
 	 * 
 	 * @return {@link ListView}
 	 */
-	private ListView getListView() {
-		return (ListView) this.findViewById(android.R.id.list);
+	private AbsListView getListView() {
+		return (AbsListView) this.findViewById(android.R.id.list);
 	}
 
 	/**
@@ -254,7 +255,11 @@ public final class ConversationListActivity extends SherlockFragmentActivity imp
 
 		this.setTheme(PreferencesActivity.getTheme(this));
 		Utils.setLocale(this);
-		this.setContentView(R.layout.conversationlist);
+		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("use_gridlayout", false)) {
+			this.setContentView(R.layout.conversationgrid);
+		} else {
+			this.setContentView(R.layout.conversationlist);
+		}
 
 		ChangelogHelper.showChangelog(this, true);
 		final List<ResolveInfo> ri = this.getPackageManager().queryBroadcastReceivers(
@@ -269,7 +274,7 @@ public final class ConversationListActivity extends SherlockFragmentActivity imp
 
 		showRows(this);
 
-		final ListView list = this.getListView();
+		final AbsListView list = this.getListView();
 		this.adapter = new ConversationAdapter(this);
 		this.setListAdapter(this.adapter);
 		list.setOnItemClickListener(this);
